@@ -1,6 +1,8 @@
 # SpringBootSamples
 Spring Boot Samples
 
+欢迎大家提意见和建议
+
 版本：spring boot 1.5.17 , jdk 1.8
 
 项目使用Maven进行打包
