@@ -2,6 +2,7 @@ package com.shanejim.myweb.personaladmin.controller;
 
 import com.shanejim.myweb.personalmodel.entity.PayMall;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @author: panshenjia
  * @create: 2018-10-26 15:42
  **/
+@RestController
 public class PageController {
 
     @GetMapping("/")
