@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shanejim.myweb.personaldao.mapper.PayMallMapper" >
+  <resultMap id="BaseResultMap" type="com.shanejim.myweb.personalmodel.entity.PayMall" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="mallkey" property="mallkey" jdbcType="VARCHAR" />
+    <result column="wx_mch_appid" property="wxMchAppid" jdbcType="VARCHAR" />
+    <result column="wx_mchid" property="wxMchid" jdbcType="VARCHAR" />
+    <result column="wx_mchkey" property="wxMchkey" jdbcType="VARCHAR" />
+    <result column="ali_appid" property="aliAppid" jdbcType="VARCHAR" />
+    <result column="ali_app_private_key" property="aliAppPrivateKey" jdbcType="VARCHAR" />
+    <result column="ali_public_key" property="aliPublicKey" jdbcType="VARCHAR" />
+    <result column="private_key_pkcs8" property="privateKeyPkcs8" jdbcType="VARCHAR" />
+    <result column="private_key_pkcs1" property="privateKeyPkcs1" jdbcType="VARCHAR" />
+    <result column="host_url" property="hostUrl" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, is_deleted, add_time, modified_time, mallkey, wx_mch_appid, wx_mchid, wx_mchkey,ali_appid ,ali_app_private_key,ali_public_key,private_key_pkcs8,private_key_pkcs1,host_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from t_pay_mall
+    where id = #{id,jdbcType=BIGINT} and is_deleted=0
+  </select>
+  <select id="selectAllPayMall" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_pay_mall where is_deleted=0
+  </select>
+  <select id="selectByMallKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_pay_mall where is_deleted=0 and mallkey = #{mallkey}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_pay_mall
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.shanejim.myweb.personalmodel.entity.PayMall" >
+    insert into t_pay_mall (id, is_deleted, add_time,
+      modified_time, mallkey, wx_mch_appid,
+      wx_mchid, wx_mchkey,ali_appid,ali_app_private_key,ali_public_key,private_key_pkcs8,private_key_pkcs1,host_url)
+    values (#{id,jdbcType=BIGINT}, #{isDeleted,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP},
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{mallkey,jdbcType=VARCHAR}, #{wxMchAppid,jdbcType=VARCHAR},
+      #{wxMchid,jdbcType=VARCHAR}, #{wxMchkey,jdbcType=VARCHAR}), #{aliAppid,jdbcType=VARCHAR}), #{aliAppPrivateKey,jdbcType=VARCHAR}),
+      #{aliPublicKey,jdbcType=VARCHAR}), #{privateKeyPkcs8,jdbcType=VARCHAR}), #{privateKeyPkcs1,jdbcType=VARCHAR}), #{hostUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" parameterType="com.shanejim.myweb.personalmodel.entity.PayMall" >
+    insert into t_pay_mall
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+      <if test="mallkey != null" >
+        mallkey,
+      </if>
+      <if test="wxMchAppid != null" >
+        wx_mch_appid,
+      </if>
+      <if test="wxMchid != null" >
+        wx_mchid,
+      </if>
+      <if test="wxMchkey != null" >
+        wx_mchkey,
+      </if>
+      <if test="aliAppid != null" >
+        ali_appid,
+      </if>
+      <if test="aliAppPrivateKey != null" >
+        ali_app_private_key,
+      </if>
+      <if test="aliPublicKey != null" >
+        ali_public_key,
+      </if>
+      <if test="privateKeyPkcs8 != null" >
+        private_key_pkcs8,
+      </if>
+      <if test="privateKeyPkcs1 != null" >
+        private_key_pkcs1,
+      </if>
+      <if test="hostUrl != null" >
+        host_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mallkey != null" >
+        #{mallkey,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchAppid != null" >
+        #{wxMchAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchid != null" >
+        #{wxMchid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchkey != null" >
+        #{wxMchkey,jdbcType=VARCHAR},
+      </if>
+      <if test="aliAppid != null" >
+        #{aliAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="aliAppPrivateKey != null" >
+        #{aliAppPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="aliPublicKey != null" >
+        #{aliPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKeyPkcs8 != null" >
+        #{privateKeyPkcs8,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKeyPkcs1 != null" >
+        #{privateKeyPkcs1,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.shanejim.myweb.personalmodel.entity.PayMall" >
+    update t_pay_mall
+    <set >
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=TINYINT},
+      </if>
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mallkey != null" >
+        mallkey = #{mallkey,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchAppid != null" >
+        wx_mch_appid = #{wxMchAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchid != null" >
+        wx_mchid = #{wxMchid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxMchkey != null" >
+        wx_mchkey = #{wxMchkey,jdbcType=VARCHAR},
+      </if>
+      <if test="aliAppid != null" >
+        ali_appid = #{aliAppid,jdbcType=VARCHAR},
+      </if>
+      <if test="aliAppPrivateKey != null" >
+        ali_app_private_key = #{aliAppPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="aliPublicKey != null" >
+        ali_public_key  = #{aliPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKeyPkcs8 != null" >
+        private_key_pkcs8  = #{privateKeyPkcs8,jdbcType=VARCHAR},
+      </if>
+      <if test="privateKeyPkcs1 != null" >
+        private_key_pkcs1  = #{privateKeyPkcs1,jdbcType=VARCHAR},
+      </if>
+      <if test="hostUrl != null" >
+        host_url  = #{hostUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.shanejim.myweb.personalmodel.entity.PayMall" >
+    update t_pay_mall
+    set is_deleted = #{isDeleted,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      mallkey = #{mallkey,jdbcType=VARCHAR},
+      wx_mch_appid = #{wxMchAppid,jdbcType=VARCHAR},
+      wx_mchid = #{wxMchid,jdbcType=VARCHAR},
+      wx_mchkey = #{wxMchkey,jdbcType=VARCHAR},
+      ali_appid = #{aliAppid,jdbcType=VARCHAR},
+      ali_app_private_key = #{aliAppPrivateKey,jdbcType=VARCHAR},
+      ali_public_key = #{aliPublicKey,jdbcType=VARCHAR},
+      private_key_pkcs8 = #{privateKeyPkcs8,jdbcType=VARCHAR},
+      private_key_pkcs1 = #{privateKeyPkcs1,jdbcType=VARCHAR},
+      host_url = #{hostUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
