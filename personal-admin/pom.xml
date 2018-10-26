@@ -48,6 +48,12 @@
             <artifactId>personal-model</artifactId>
         </dependency>
 
+        <!--引用personal-dao项目 -->
+        <dependency>
+            <groupId>com.shanejim.myweb</groupId>
+            <artifactId>personal-dao</artifactId>
+        </dependency>
+
         <!--devtools-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,17 +79,7 @@
             <version>1.9.22</version>
         </dependency>
 
-        <!--swagger2-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
+
     </dependencies>
 
     <build>
