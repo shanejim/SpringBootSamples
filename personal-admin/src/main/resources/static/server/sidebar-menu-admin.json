@@ -1,0 +1,27 @@
+[
+  {
+    "text": "主菜单",
+    "heading": "true",
+    "translate": "主菜单"
+  },
+  {
+    "text": "打款管理",
+    "sref": "#",
+    "icon": "fa fa-group",
+    "submenu": [
+      {
+        "text": "打款商户管理",
+        "sref": "app.payMall",
+        "translate": "打款商户管理"
+      },
+      {
+        "text": "打款记录",
+        "sref": "app.payRecord",
+        "translate": "打款记录"
+      }
+    ],
+    "alert": "",
+    "label": "label label-info",
+    "translate": "打款管理"
+  }
+]

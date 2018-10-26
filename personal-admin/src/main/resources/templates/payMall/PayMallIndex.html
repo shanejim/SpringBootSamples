@@ -1,0 +1,513 @@
+<style>
+    .ngdialog.ngdialog-theme-plain .ngdialog-content {
+        width: 60% !important;
+    }
+</style>
+<h3>打款商户管理</h3>
+<div th:text="${user.mallkey}"></div>
+<div class="panel panel-default" ng-controller="PayMallController"
+     ng-class="{ 'whirl standard': isLoading,'': isLoading }">
+    <div class="panel-heading">
+        <div class="form-inline ng-pristine ng-valid">
+            <!--<div class="form-group">-->
+            <!--<input placeholder="作者" class="form-control" type="text" ng-model="Keywords">-->
+            <!--<button type="submit" class="btn btn-labeled btn-primary"-->
+            <!--ng-click="tableParams.$params.page = 1;tableParams.reload()">-->
+            <!--<span class="btn-label">-->
+            <!--<em class="fa fa-search"></em>-->
+            <!--</span>搜索-->
+            <!--</button>-->
+            <!--</div>-->
+            <div class="form-group">
+                <button type="submit" class="btn btn-labeled btn-success" ng-click="updateMall({})">
+                    <span class="btn-label">
+                        <em class="fa fa-plus"></em>
+                    </span>添加商户
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table table-striped table-bproducted table-hover">
+                <tbody>
+                <tr ng-repeat="item in $data">
+                    <td data-title="'商户key'" class="text-left" header-class="'text-left'">{{item.mallkey}}</td>
+                    <td data-title="'添加时间'" class="text-left" header-class="'text-left'">{{item.addTime}}</td>
+                    <td data-title="'微信appid'" class="text-left" header-class="'text-left'">{{item.wxMchAppid}}</td>
+                    <td data-title="'支付宝应用appid'" class="text-left" header-class="'text-left'">{{item.aliAppid}}</td>
+                    <td data-title="''" nowrap="nowrap">
+                        <button type="button" ng-click="updateMall(item)" class="mb-sm btn">
+                            编辑
+                        </button>
+                        <button type="button" ng-click="editMallWxConfig(item)" class="mb-sm btn">
+                            配置微信打款
+                        </button>
+                        <button type="button" ng-click="editMallAliConfig(item)" class="mb-sm btn">
+                            配置支付宝打款
+                        </button>
+                        <button type="button" ng-click="removeMall($index,item.id)" class="mb-sm btn">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="addMall">
+        <div class="ngdialog-message">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" name="formValidate">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <fieldset class="b0">
+                                    <legend>{{PayMall.id == 0 || PayMall.id == null ? '添加商户' : '修改商户信息'}}
+                                    </legend>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>商户key</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="mallkey" required=""
+                                                   ng-model="PayMall.mallkey" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">商户域名</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="hostUrl" required=""
+                                                   ng-model="PayMall.hostUrl" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <!--<fieldset>-->
+                                <!--<div class="form-group">-->
+                                <!--<label class="col-sm-2 control-label"><span class="text-danger"-->
+                                <!--style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信appid</label>-->
+                                <!--<div class="col-sm-4">-->
+                                <!--<input type="text" name="mchAppid" required=""-->
+                                <!--ng-model="PayMall.wxMchAppid" class="form-control"-->
+                                <!--maxlength="50" autocomplete="off"/>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</fieldset>-->
+                                <!--<fieldset>-->
+                                <!--<div class="form-group">-->
+                                <!--<label class="col-sm-2 control-label"><span class="text-danger"-->
+                                <!--style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信商户号</label>-->
+                                <!--<div class="col-sm-4">-->
+                                <!--<input type="text" name="mchid" required=""-->
+                                <!--ng-model="PayMall.wxMchid" class="form-control"-->
+                                <!--maxlength="50" autocomplete="off"/>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</fieldset>-->
+                                <!--<fieldset>-->
+                                <!--<div class="form-group">-->
+                                <!--<label class="col-sm-2 control-label"><span class="text-danger"-->
+                                <!--style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信商户秘钥</label>-->
+                                <!--<div class="col-sm-4">-->
+                                <!--<input type="text" name="mchkey" required=""-->
+                                <!--ng-model="PayMall.wxMchkey" class="form-control"-->
+                                <!--maxlength="50" autocomplete="off"/>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</fieldset>-->
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button type="button" class="btn btn-default" ng-click="closeDialog()">
+                                    关闭
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="saveThisMessage()">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    <script type="text/ng-template" id="editMallWxConfig">
+        <div class="ngdialog-message">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" name="formValidate">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <fieldset class="b0">
+                                    <legend>配置微信打款
+                                    </legend>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信appid</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="mchAppid" required=""
+                                                   ng-model="PayWxMall.wxMchAppid" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信商户号</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="mchid" required=""
+                                                   ng-model="PayWxMall.wxMchid" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>微信商户秘钥</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="mchkey" required=""
+                                                   ng-model="PayWxMall.wxMchkey" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button type="button" class="btn btn-default" ng-click="closeDialog()">
+                                    关闭
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="savePayMallWxConfig()">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    <script type="text/ng-template" id="editMallAliConfig">
+        <div class="ngdialog-message">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" name="formValidate">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <fieldset class="b0">
+                                    <legend>配置支付宝打款
+                                    </legend>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>支付宝应用appid</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="aliAppid" required=""
+                                                   ng-model="PayAliMall.aliAppid" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>支付宝应用私钥
+                                            <a href="javascript:void(1)" class="lml_sample">
+                                                <i class="ico_help">?</i>
+                                                <span class="help_pop" display="inline-block"
+                                                      style="width: 220px; text-align: left;left:-100px">
+                                                    生成的私钥
+                                                </span>
+                                            </a>
+                                        </label>
+                                        <div class="col-sm-4">
+                                            <textarea class="form-control" style="height: 250px;"
+                                                      ng-model="PayAliMall.aliAppPrivateKey"></textarea>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>支付宝公钥
+                                            <a href="javascript:void(1)" class="lml_sample">
+                                                <i class="ico_help">?</i>
+                                                <span class="help_pop" display="inline-block"
+                                                      style="width: 220px; text-align: left;left:-100px">
+                                                    不是生成的应用公钥，是上传生成的应用公钥后得到的支付宝公钥
+                                                </span>
+                                            </a></label>
+                                        <div class="col-sm-4">
+                                            <textarea class="form-control" style="height: 250px;"
+                                                      ng-model="PayAliMall.aliPublicKey"></textarea>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button type="button" class="btn btn-default" ng-click="closeDialog()">
+                                    关闭
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="savePayMallAliConfig()">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="modalDialogId">
+        <div class="ngdialog-message text-center">
+            <h3>确定要删除吗?</h3>
+            <p>删除后不可恢复!</p>
+            <br/>
+            <button type="button" ng-click="confirm()" class="btn btn-primary mr">确认</button>
+            <button type="button" ng-click="closeThisDialog('button')" class="btn btn-default">取消</button>
+        </div>
+    </script>
+
+</div>
+<script>
+    App.controller('PayMallController', [
+        '$scope', '$resource', '$state', '$route', 'ngDialog', '$http', 'ngTableParams', 'ngTableDataService', 'Notify', '$filter',
+        function ($scope, $resource, $state, $route, ngDialog, $http, ngTableParams, ngTableDataService, Notify, $filter) {
+            'use strict';
+            $scope.isLoading = true;
+            $scope.submitted = false;
+            $scope.data = {};
+
+            $scope.tableParams = new ngTableParams({
+                page: 1,
+                count: 10,
+                sorting: {
+                    AddTime: 'desc'     // 初始化排序
+                }
+            }, {
+                getData: function ($defer, params) {
+                    $scope.isLoading = true;
+                    var requestParams = {
+                        pageNum: params.page(),
+                        pageSize: params.count(),
+                        keywords: $scope.Keywords
+                    };
+
+                    $http({
+                        method: "get",
+                        params: requestParams,
+                        url: "/payMalls/v1"
+                    }).then(function successCallback(response) {
+                        params.total(response.data.data.total);
+                        $defer.resolve(response.data.data.results);
+                        $scope.isLoading = false;
+                    }, function errorCallback(response) {
+                    });
+                }
+            });
+
+            //删除
+            $scope.removeMall = function (index, id) {
+                ngDialog.openConfirm({
+                    template: 'modalDialogId',
+                    className: 'ngdialog-theme-default'
+                }).then(function (value) {
+                        var url = '/payMalls/v1/' + id;
+                        $http({
+                            method: 'delete',
+                            url: url
+                        }).then(function successCallback(response) {
+                            if (response.data.code == 0) {
+                                $scope.tableParams.reload();
+                                Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            } else {
+                                Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                            }
+                        }, function errorCallback(response) {
+                        });
+                    }, function (reason) {
+                    }
+                );
+            }
+
+            //新增、更新展示
+            $scope.updateMall = function (item) {
+                $scope.PayMall = angular.copy(item);
+
+                ngDialog.openConfirm({
+                    template: 'addMall',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope,
+                    preCloseCallback: function () {
+                        $scope.myCroppedImage = undefined;
+                        return true;
+                    }
+                }).then(function (value) {
+                }, function (reason) {
+                });
+            }
+
+            $scope.editMallWxConfig = function (item) {
+                $scope.PayWxMall = angular.copy(item);
+
+                ngDialog.openConfirm({
+                    template: 'editMallWxConfig',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope,
+                    preCloseCallback: function () {
+                        $scope.myCroppedImage = undefined;
+                        return true;
+                    }
+                }).then(function (value) {
+                }, function (reason) {
+                });
+            }
+
+            $scope.editMallAliConfig = function (item) {
+                $scope.PayAliMall = angular.copy(item);
+
+                ngDialog.openConfirm({
+                    template: 'editMallAliConfig',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope,
+                    preCloseCallback: function () {
+                        $scope.myCroppedImage = undefined;
+                        return true;
+                    }
+                }).then(function (value) {
+                }, function (reason) {
+                });
+            }
+
+
+            // 提交
+            $scope.saveThisMessage = function () {
+                if (!$scope.PayMall.mallkey || $scope.PayMall.mallkey == null) {
+                    Notify.alert("请输入商户key", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+
+                if ($scope.PayMall.id > 0) {
+                    var url = "/payMalls/v1/" + $scope.PayMall.id
+                    $http({
+                        method: "put",
+                        data: $scope.PayMall,
+                        url: url
+                    }).then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.code == 0) {
+                            Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            $scope.tableParams.reload();
+                            ngDialog.closeAll();
+                        }
+                        else {
+                            Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                        }
+                    }, function errorCallback(response) {
+                    });
+                }
+                else {
+                    $http({
+                        method: "post",
+                        url: "/payMalls/v1",
+                        data: $scope.PayMall
+                    }).then(function successCallback(response) {
+                        if (response.data.code == 0) {
+                            Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            $scope.tableParams.reload();
+                            ngDialog.closeAll();
+                        }
+                        else {
+                            Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                        }
+                    }, function errorCallback(response) {
+                    });
+                }
+            };
+
+            $scope.savePayMallWxConfig = function () {
+                if (!$scope.PayWxMall.wxMchAppid || $scope.PayWxMall.wxMchAppid == null) {
+                    Notify.alert("请输入微信appid", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+                if (!$scope.PayWxMall.wxMchid || $scope.PayWxMall.wxMchid == null) {
+                    Notify.alert("请输入微信商户号", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+                if (!$scope.PayWxMall.wxMchkey || $scope.PayWxMall.wxMchkey == null) {
+                    Notify.alert("请输入微信商户秘钥", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+
+                var url = "/payMalls/v1/" + $scope.PayWxMall.id
+                $http({
+                    method: "put",
+                    data: $scope.PayWxMall,
+                    url: url
+                }).then(function successCallback(response) {
+                    console.log(response);
+                    if (response.data.code == 0) {
+                        Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                        $scope.tableParams.reload();
+                        ngDialog.closeAll();
+                    }
+                    else {
+                        Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                    }
+                }, function errorCallback(response) {
+                });
+            };
+
+            $scope.savePayMallAliConfig = function () {
+                if (!$scope.PayAliMall.aliAppid || $scope.PayAliMall.aliAppid == null) {
+                    Notify.alert("请输入支付宝应用appid", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+                if (!$scope.PayAliMall.aliAppPrivateKey || $scope.PayAliMall.aliAppPrivateKey == null) {
+                    Notify.alert("请输入支付宝应用私钥", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+                if (!$scope.PayAliMall.aliPublicKey || $scope.PayAliMall.aliPublicKey == null) {
+                    Notify.alert("请输入支付宝公钥（非应用公钥）", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+
+                var url = "/payMalls/v1/" + $scope.PayAliMall.id
+                $http({
+                    method: "put",
+                    data: $scope.PayAliMall,
+                    url: url
+                }).then(function successCallback(response) {
+                    console.log(response);
+                    if (response.data.code == 0) {
+                        Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                        $scope.tableParams.reload();
+                        ngDialog.closeAll();
+                    }
+                    else {
+                        Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                    }
+                }, function errorCallback(response) {
+                });
+            };
+
+            //返回列表
+            $scope.closeDialog = function () {
+                ngDialog.closeAll();
+            }
+        }]);
+</script>
