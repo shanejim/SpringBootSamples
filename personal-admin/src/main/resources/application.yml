@@ -1,6 +1,8 @@
 server:
   port: 8188
 spring:
+  profiles:
+    active: dev
   datasource:
     name: test
     url: jdbc:mysql://192.168.180.128:33714/personal?characterEncoding=utf-8
@@ -34,7 +36,23 @@ mybatis:
   mapper-locations: classpath:mapping/*.xml
   type-aliases-package: com.shanejim.myweb.personalmodel.entity
 
+jedis:
+    host: "192.168.180.128"
+    database: 8
+    password: xiaojian123,,,
+    port: 65156
+    maxTotal: 1000
+    maxIdle: 50
+    maxWaitMillis: 1500
+    testOnBorrow: true
+    testOnReturn: true
 
 system-params:
   image-hosturl: http://img.xsmore.com/wxrobot
+
+#静态资源对外暴露的访问路径
+file:
+  staticAccessPath: /file/**
+  uploadFolder: /var/spring/uploadFiles/
+#文件上传目录（注意Linux和Windows上的目录结构不同，开发机Windows，application-dev里面）
 
