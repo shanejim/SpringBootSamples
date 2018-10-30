@@ -72,8 +72,8 @@ App.run(["$rootScope", "$state", "$stateParams", '$window', '$templateCache', '$
         // Scope Globals
         // ----------------------------------- 
         $rootScope.app = {
-            name: 'EnterprisePay',
-            description: '企业打款后台管理',
+            name: 'ShaneJim',
+            description: 'SpringBootSamples',
             year: ((new Date()).getFullYear()),
             layout: {
                 isFixed: true,
