@@ -79,6 +79,12 @@
             <version>1.9.22</version>
         </dependency>
 
+        <!--springsecurity-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
 
     </dependencies>
 
