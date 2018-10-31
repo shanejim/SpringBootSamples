@@ -1,8 +1,5 @@
 
 
-
-
-#pagehelper·ÖÒ³²å¼ş
 pagehelper:
     helperDialect: mysql
     reasonable: false
