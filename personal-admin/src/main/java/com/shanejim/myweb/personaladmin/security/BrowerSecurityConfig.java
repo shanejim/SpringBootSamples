@@ -2,10 +2,12 @@ package com.shanejim.myweb.personaladmin.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 /**
  * @description: TODO
@@ -28,6 +30,15 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     MyAuthenctiationFailureHandler myAuthenctiationFailureHandler;
 
+    @Autowired
+    SelfAuthenticationProvider provider; // 自定义安全认证
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // 加入自定义的安全认证
+        auth.authenticationProvider(provider);
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -37,7 +48,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()        // 定义哪些URL需要被保护、哪些不需要被保护
                 .antMatchers("/", "/app/**", "/css/**", "/img/**", "/server/**", "/vendor/**",
                         "/swagger-ui.html", "/webjars/**", "/swagger-resources/**", "/v2/api-docs" ,
-                        "/pay/**","/page/**").permitAll()
+                        "/pay/**","/page/**","/employees/**").permitAll()
 //                .antMatchers("/payRecord/**").hasAuthority("admin21")
                 .anyRequest().authenticated()               // 任何请求,登录后可以访问
                 .and()
@@ -54,5 +65,8 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling().accessDeniedHandler(myAccessDeniedHandler);
         http.exceptionHandling().authenticationEntryPoint(myAuthenticationEntryPoint);
+
+//        http.addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
+//                .csrf().disable();
     }
 }
