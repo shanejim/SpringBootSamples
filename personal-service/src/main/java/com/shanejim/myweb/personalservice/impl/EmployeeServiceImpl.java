@@ -51,6 +51,36 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public int modifyPassword(Long id, String newPassword) {
+        Employee employeeBefore = employeeMapper.selectByPrimaryKey(id);
+        if (employeeBefore == null) {
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "账号不存在或已被删除，请刷新后重试");
+        }
+
+        Employee employee = new Employee();
+        employee.setId(id);
+        employee.setModifiedTime(new Date());
+        String password = DigestUtil.sha256Digest(newPassword + employeeBefore.getSalt());
+
+
+        return 0;
+    }
+
+    @Override
+    public int deleteEmployee(Long id) {
+        Employee employeeBefore = employeeMapper.selectByPrimaryKey(id);
+        if (employeeBefore == null) {
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "账号不存在或已被删除，请刷新后重试");
+        }
+
+        Employee employee = new Employee();
+        employee.setId(id);
+        employee.setModifiedTime(new Date());
+        employee.setIsDeleted(new Byte("1"));
+        return employeeMapper.updateByPrimaryKeySelective(employee);
+    }
+
+    @Override
     public Employee checkLogin(String username, String password) {
         Employee employee = employeeMapper.selectByName(username);
         if (employee == null) {

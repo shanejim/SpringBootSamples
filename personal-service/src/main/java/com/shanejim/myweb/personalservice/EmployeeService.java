@@ -13,5 +13,9 @@ public interface EmployeeService {
 
     int insertEmployee(AddOrUpdateEmployeeQuery employeeDto);
 
+    int deleteEmployee(Long id);
+
+    int modifyPassword(Long id, String newPassword);
+
     Employee findEmployeeByUSerName(String username);
 }
