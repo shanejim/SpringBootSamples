@@ -2,6 +2,7 @@ package com.shanejim.myweb.personalservice;
 
 import com.shanejim.myweb.personalmodel.entity.Employee;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
+import com.shanejim.myweb.personalmodel.response.PagingReturn;
 
 /**
  * @description: TODO
@@ -18,4 +19,6 @@ public interface EmployeeService {
     int modifyPassword(Long id, String newPassword);
 
     Employee findEmployeeByUSerName(String username);
+
+    PagingReturn<Employee> listEmployee(Integer pageNum, Integer pageSize);
 }

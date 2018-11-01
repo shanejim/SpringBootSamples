@@ -85,7 +85,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-
+        <!--localdatetime时间转化json格式处理-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

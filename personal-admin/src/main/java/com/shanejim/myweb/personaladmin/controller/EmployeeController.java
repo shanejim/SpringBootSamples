@@ -1,7 +1,9 @@
 package com.shanejim.myweb.personaladmin.controller;
 
+import com.shanejim.myweb.personalmodel.entity.Employee;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
 import com.shanejim.myweb.personalmodel.query.ModifyPasswordQuery;
+import com.shanejim.myweb.personalmodel.response.PagingReturn;
 import com.shanejim.myweb.personalmodel.response.Result;
 import com.shanejim.myweb.personalmodel.utils.ResultUtil;
 import com.shanejim.myweb.personalservice.EmployeeService;
@@ -29,7 +31,6 @@ public class EmployeeController {
     @PostMapping("")
     public Result insertEmployee(@RequestBody @Validated AddOrUpdateEmployeeQuery dto) {
         employeeService.insertEmployee(dto);
-
         return ResultUtil.success();
     }
 
@@ -37,16 +38,22 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public Result deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
-
         return ResultUtil.success();
     }
 
     @ApiOperation(value = "修改密码", notes = "修改密码接口，Post，传json")
     @PostMapping("/modifyPassword")
-    public Result insertChatRoom(@RequestBody @Validated ModifyPasswordQuery dto) {
+    public Result modifyPassword(@RequestBody @Validated ModifyPasswordQuery dto) {
         employeeService.modifyPassword(dto.getId(), dto.getPassword());
-
         return ResultUtil.success();
+    }
+
+    @ApiOperation(value = "分页获取员工列表", notes = "分页获取所有员工")
+    @GetMapping(value = "")
+    public Result<PagingReturn<Employee>> getPagingList(@RequestParam(name = "pageNum", required = false) Integer pageNum,
+                                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+        PagingReturn model = employeeService.listEmployee(pageNum, pageSize);
+        return ResultUtil.success(model);
     }
 
 

@@ -1,11 +1,13 @@
 package com.shanejim.myweb.personaladmin.controller;
 
 import com.shanejim.myweb.personalmodel.enums.CodeEnums;
+import com.shanejim.myweb.personalmodel.query.TestQuery;
 import com.shanejim.myweb.personalmodel.response.Result;
 import com.shanejim.myweb.personalmodel.response.UploadReturn;
 import com.shanejim.myweb.personalmodel.utils.FileUtil;
 import com.shanejim.myweb.personalmodel.utils.ResultUtil;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,9 +18,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.JedisPool;
 
 /**
  * @author shanejim
@@ -27,6 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @RestController
 public class TestController {
+    @Autowired
+    JedisPool jedisPool;
+
     @Value("${file.staticAccessPath}")
     private String staticAccessPath;
 
@@ -87,4 +94,26 @@ public class TestController {
 
         return ResultUtil.success();
     }
+
+    @PostMapping("/testTime")
+    public Result testTime(@RequestBody TestQuery query) {
+
+        return ResultUtil.success();
+    }
+
+
+    //分布式锁
+      /*  Jedis jedis = RedisUtil.getConn();
+        //jedis.set("key", "哈哈哈");
+        String uuid = UUID.randomUUID().toString();
+
+        boolean result = RedisLockUtil.tryGetDistributedLock(jedis, "fenbushikey", uuid, 100000);
+
+        RedisLockUtil.releaseDistributedLock(jedis, "fenbushikey", uuid);
+
+        if (jedis != null) {
+            jedis.close();
+        }*/
+
+
 }

@@ -1,16 +1,22 @@
 package com.shanejim.myweb.personalservice.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.shanejim.myweb.personaldao.mapper.EmployeeMapper;
 import com.shanejim.myweb.personalmodel.config.ApiException;
 import com.shanejim.myweb.personalmodel.entity.Employee;
+import com.shanejim.myweb.personalmodel.entity.PayMall;
 import com.shanejim.myweb.personalmodel.enums.CodeEnums;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
+import com.shanejim.myweb.personalmodel.response.PagingReturn;
 import com.shanejim.myweb.personalmodel.utils.DigestUtil;
 import com.shanejim.myweb.personalservice.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,8 +44,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
 
         employee.setIsDeleted(new Byte("0"));
-        employee.setAddTime(new Date());
-        employee.setModifiedTime(new Date());
+        employee.setAddTime(LocalDateTime.now());
+        employee.setModifiedTime(LocalDateTime.now());
         employee.setName(employeeDto.getName());
 
         //用UUID生成随机盐
@@ -59,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = new Employee();
         employee.setId(id);
-        employee.setModifiedTime(new Date());
+        employee.setModifiedTime(LocalDateTime.now());
         String password = DigestUtil.sha256Digest(newPassword + employeeBefore.getSalt());
 
 
@@ -75,9 +81,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee employee = new Employee();
         employee.setId(id);
-        employee.setModifiedTime(new Date());
+        employee.setModifiedTime(LocalDateTime.now());
         employee.setIsDeleted(new Byte("1"));
         return employeeMapper.updateByPrimaryKeySelective(employee);
+    }
+
+    @Override
+    public PagingReturn<Employee> listEmployee(Integer pageNum, Integer pageSize) {
+        if (pageNum != null && pageSize != null) {
+            PageHelper.startPage(pageNum, pageSize);
+        }
+
+        List<Employee> employeeList = employeeMapper.selectAllEmployee();
+        PageInfo<Employee> pageInfo = new PageInfo<>(employeeList);
+
+        PagingReturn<Employee> model = new PagingReturn<>();
+        model.setTotal(pageInfo.getTotal());
+        model.setResults(employeeList);
+        return model;
     }
 
     @Override
