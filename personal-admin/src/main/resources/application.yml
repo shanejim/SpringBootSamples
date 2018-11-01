@@ -31,6 +31,10 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
     default-property-inclusion: non_null
+  http:
+        multipart:
+          max-file-size: 30MB
+          max-request-size: 30MB
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml
