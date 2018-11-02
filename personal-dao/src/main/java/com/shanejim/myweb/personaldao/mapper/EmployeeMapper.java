@@ -1,7 +1,6 @@
 package com.shanejim.myweb.personaldao.mapper;
 
 import com.shanejim.myweb.personalmodel.entity.Employee;
-import com.shanejim.myweb.personalmodel.entity.PayMall;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

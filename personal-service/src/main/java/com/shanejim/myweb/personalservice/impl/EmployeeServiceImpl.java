@@ -27,7 +27,7 @@ import java.util.UUID;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
-    EmployeeMapper employeeMapper;
+    private EmployeeMapper employeeMapper;
 
     @Override
     public Employee findEmployeeByUSerName(String username) {
@@ -67,9 +67,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setId(id);
         employee.setModifiedTime(LocalDateTime.now());
         String password = DigestUtil.sha256Digest(newPassword + employeeBefore.getSalt());
+        employee.setPassword(password);
 
-
-        return 0;
+        return employeeMapper.updateByPrimaryKeySelective(employee);
     }
 
     @Override
