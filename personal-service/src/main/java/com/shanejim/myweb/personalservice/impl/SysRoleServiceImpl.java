@@ -2,17 +2,23 @@ package com.shanejim.myweb.personalservice.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.shanejim.myweb.personaldao.mapper.SysPermissionMapper;
 import com.shanejim.myweb.personaldao.mapper.SysRoleMapper;
+import com.shanejim.myweb.personaldao.mapper.SysRolePermissionMapper;
 import com.shanejim.myweb.personalmodel.config.ApiException;
+import com.shanejim.myweb.personalmodel.entity.SysPermission;
 import com.shanejim.myweb.personalmodel.entity.SysRole;
 import com.shanejim.myweb.personalmodel.enums.CodeEnums;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateSysRoleQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
+import com.shanejim.myweb.personalmodel.vo.SysPermissionState;
+import com.shanejim.myweb.personalmodel.vo.SysPermissionTreeVo;
 import com.shanejim.myweb.personalservice.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +31,12 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysRolePermissionMapper sysRolePermissionMapper;
+
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
     @Override
     public int insertSysRole(AddOrUpdateSysRoleQuery dto) {
@@ -75,7 +87,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public PagingReturn listSysRole(Integer pageNum, Integer pageSize,String keywords) {
+    public PagingReturn listSysRole(Integer pageNum, Integer pageSize, String keywords) {
         if (pageNum != null && pageSize != null) {
             PageHelper.startPage(pageNum, pageSize);
         }
@@ -87,5 +99,37 @@ public class SysRoleServiceImpl implements SysRoleService {
         model.setTotal(pageInfo.getTotal());
         model.setResults(sysRoleList);
         return model;
+    }
+
+    @Override
+    public List<SysPermissionTreeVo> listThisSysRolePermission(Long sysRoleId) {
+        List<Long> thisSysRolePermission = sysRolePermissionMapper.selectPermissions(sysRoleId);
+        List<SysPermission> allSysPermission = sysPermissionMapper.selectAllSysPermission();
+
+        List<SysPermissionTreeVo> returnList = new ArrayList<>();
+        for (SysPermission permission : allSysPermission) {
+            SysPermissionTreeVo vo = new SysPermissionTreeVo();
+            vo.setId(permission.getId());
+            vo.setParentId(permission.getParentId());
+            vo.setText(permission.getText());
+            if (permission.getParentId() == 0) {
+                vo.setParent("#");
+            } else {
+                vo.setParent(permission.getParentId().toString());
+            }
+            if (thisSysRolePermission.contains(permission.getId())) {
+                SysPermissionState state = new SysPermissionState();
+                state.setSelected(true);
+                vo.setState(state);
+            }
+            returnList.add(vo);
+        }
+
+        return returnList;
+    }
+
+    @Override
+    public void updateSysRolePermisson(Long id, List<Long> authList) {
+
     }
 }

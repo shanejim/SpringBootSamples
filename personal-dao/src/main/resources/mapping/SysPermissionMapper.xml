@@ -25,7 +25,7 @@
   <select id="selectAllSysPermission" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
-    from t_sys_permission where is_deleted=0
+    from t_sys_permission where is_deleted=0 order by sort,id
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_sys_permission
