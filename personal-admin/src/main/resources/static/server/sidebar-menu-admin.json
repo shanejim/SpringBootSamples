@@ -23,5 +23,25 @@
     "alert": "",
     "label": "label label-info",
     "translate": "打款管理"
+  },
+  {
+    "text": "人员管理",
+    "sref": "#",
+    "icon": "icon-users",
+    "submenu": [
+      {
+        "text": "职位管理",
+        "sref": "app.sysRole",
+        "translate": "职位管理"
+      },
+      {
+        "text": "员工管理",
+        "sref": "app.sysPermission",
+        "translate": "员工管理"
+      }
+    ],
+    "alert": "",
+    "label": "label label-info",
+    "translate": "人员管理"
   }
 ]
