@@ -17,6 +17,16 @@
     from t_sys_role
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectAllSysRole" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_sys_role where is_deleted=0
+  </select>
+  <select id="selectByRoleName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_sys_role where is_deleted=0 and role_name = #{roleName}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_sys_role
     where id = #{id,jdbcType=BIGINT}
