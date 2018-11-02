@@ -54,8 +54,9 @@ public class SysRoleController {
 
     @GetMapping(value = "/v1")
     public Result<PagingReturn<SysRole>> getPagingList(@RequestParam(name = "pageNum", required = false) Integer pageNum,
-                                                       @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        PagingReturn model = sysRoleService.listSysRole(pageNum, pageSize);
+                                                       @RequestParam(name = "pageSize", required = false) Integer pageSize,
+                                                       @RequestParam(name = "keywords", required = false) String keywords) {
+        PagingReturn model = sysRoleService.listSysRole(pageNum, pageSize,keywords);
         return ResultUtil.success(model);
     }
 }

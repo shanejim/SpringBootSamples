@@ -23,12 +23,23 @@ public class PageController {
 
     @GetMapping("/page/payMall/index")
     public ModelAndView weixinPayMallIndex() {
-
         ModelAndView mv = new ModelAndView("payMall/PayMallIndex");
         PayMall payMall = new PayMall();
         payMall.setMallkey("woshikey123");
         mv.getModel().put("user", payMall);
         mv.addObject("time", new Date());
+        return mv;
+    }
+
+    @GetMapping("/page/employee/index")
+    public ModelAndView employeeIndex() {
+        ModelAndView mv = new ModelAndView("employee/EmployeeIndex");
+        return mv;
+    }
+
+    @GetMapping("/page/sysRole/index")
+    public ModelAndView sysRoleIndex() {
+        ModelAndView mv = new ModelAndView("employee/SysRoleIndex");
         return mv;
     }
 }

@@ -20,5 +20,5 @@ public interface SysRoleMapper {
 
     int updateByPrimaryKey(SysRole record);
 
-    List<SysRole> selectAllSysRole();
+    List<SysRole> selectAllSysRole(@Param("keywords") String keywords);
 }

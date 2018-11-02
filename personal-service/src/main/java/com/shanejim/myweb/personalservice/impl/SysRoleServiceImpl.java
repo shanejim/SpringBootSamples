@@ -30,7 +30,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public int insertSysRole(AddOrUpdateSysRoleQuery dto) {
         SysRole sysRoleBefore = sysRoleMapper.selectByRoleName(dto.getRoleName());
         if (sysRoleBefore != null) {
-            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "角色名不能重复！");
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "职位名称不能重复！");
         }
         SysRole sysRole = new SysRole();
         sysRole.setIsDeleted(new Byte("0"));
@@ -45,7 +45,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public int updateSysRole(Long id, AddOrUpdateSysRoleQuery dto) {
         SysRole sysRoleBefore = sysRoleMapper.selectByRoleName(dto.getRoleName());
         if (sysRoleBefore != null && sysRoleBefore.getId() != id) {
-            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "角色名不能重复！");
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "职位名称不能重复！");
         }
         SysRole sysRole = new SysRole();
         sysRole.setId(id);
@@ -59,7 +59,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public int deleteSysRole(Long id) {
         SysRole sysRoleBefore = sysRoleMapper.selectByPrimaryKey(id);
         if (sysRoleBefore == null) {
-            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "角色名不存在或已被删除！");
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "职位不存在或已被删除！");
         }
         SysRole sysRole = new SysRole();
         sysRole.setId(id);
@@ -75,12 +75,12 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public PagingReturn listSysRole(Integer pageNum, Integer pageSize) {
+    public PagingReturn listSysRole(Integer pageNum, Integer pageSize,String keywords) {
         if (pageNum != null && pageSize != null) {
             PageHelper.startPage(pageNum, pageSize);
         }
 
-        List<SysRole> sysRoleList = sysRoleMapper.selectAllSysRole();
+        List<SysRole> sysRoleList = sysRoleMapper.selectAllSysRole(keywords);
         PageInfo<SysRole> pageInfo = new PageInfo<>(sysRoleList);
 
         PagingReturn<SysRole> model = new PagingReturn<>();

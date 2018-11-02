@@ -1,0 +1,336 @@
+<style>
+    .ngdialog.ngdialog-theme-plain .ngdialog-content {
+        width: 50% !important;
+    }
+</style>
+<h3>职位管理</h3>
+<div class="panel panel-default" ng-controller="SysRoleController"
+     ng-class="{ 'whirl standard': isLoading,'': isLoading }">
+    <div class="panel-heading">
+        <div class="form-inline ng-pristine ng-valid">
+            <div class="form-group">
+                <input placeholder="职位名称" class="form-control" type="text" ng-model="Keywords">
+                <button type="submit" class="btn btn-labeled btn-primary"
+                        ng-click="tableParams.$params.page = 1;tableParams.reload()">
+            <span class="btn-label">
+            <em class="fa fa-search"></em>
+            </span>搜索
+                </button>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-labeled btn-success" ng-click="updateSysRole({})">
+                    <span class="btn-label">
+                        <em class="fa fa-plus"></em>
+                    </span>添加职位
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table ng-table="tableParams" class="table table-striped table-bproducted table-hover">
+                <tbody>
+                <tr ng-repeat="item in $data">
+                    <td data-title="'职位名称'" class="text-left" header-class="'text-left'">{{item.roleName}}</td>
+                    <td data-title="'添加时间'" class="text-left" header-class="'text-left'">{{item.addTime}}</td>
+                    <td data-title="''" nowrap="nowrap">
+                        <button type="button" ng-click="updateSysRole(item)" class="mb-sm btn">
+                            编辑
+                        </button>
+                        <button type="button" ng-click="updateAuth(item.id)" class="mb-sm btn">
+                            修改权限
+                        </button>
+                        <button type="button" ng-click="removeMall($index,item.id)" class="mb-sm btn">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="addSysRole">
+        <div class="ngdialog-message">
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="form-horizontal" name="formValidate">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <fieldset class="b0">
+                                    <legend>{{ThisSysRole.id == 0 || ThisSysRole.id == null ? '添加职位' : '修改职位信息'}}
+                                    </legend>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label"><span class="text-danger"
+                                                                                    style=" font-size:  18px;font-weight:  bold; vertical-align: -5px;margin-right: 10px;">*</span>职位名称</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" name="roleName" required=""
+                                                   ng-model="ThisSysRole.roleName" class="form-control"
+                                                   maxlength="50" autocomplete="off"/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button type="button" class="btn btn-default" ng-click="closeDialog()">
+                                    关闭
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="saveThisMessage()">
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="modalDialogId">
+        <div class="ngdialog-message text-center">
+            <h3>确定要删除吗?</h3>
+            <p>删除后不可恢复!</p>
+            <br/>
+            <button type="button" ng-click="confirm()" class="btn btn-primary mr">确认</button>
+            <button type="button" ng-click="closeThisDialog('button')" class="btn btn-default">取消</button>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="getJurisdictionDialogId">
+        <div class="ngdialog-message">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <fieldset class="b0">
+                        <legend>职位权限管理</legend>
+                    </fieldset>
+                    <fieldset>
+                        <div id="authTree" js-tree="vm.treeConfig" should-apply="vm.applyModelChanges()"
+                             ng-model="vm.treeData" tree="vm.treeInstance"
+                             tree-events="ready:vm.readyCB;create_node:vm.createCB"></div>
+                    </fieldset>
+                    <div class="panel-footer text-right">
+                        <button type="button" class="btn btn-default" ng-click="closeThisDialog()">
+                            关闭
+                        </button>
+                        <button type="button" class="btn btn-default" ng-click="serveRootMessage()">
+                            确定
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+</div>
+<script>
+    App.controller('SysRoleController', [
+        '$scope', '$resource', '$state', '$route', 'ngDialog', '$http', 'ngTableParams', 'ngTableDataService', 'Notify', '$filter',
+        function ($scope, $resource, $state, $route, ngDialog, $http, ngTableParams, ngTableDataService, Notify, $filter) {
+            'use strict';
+            $scope.isLoading = true;
+            $scope.submitted = false;
+            $scope.data = {};
+
+            $scope.tableParams = new ngTableParams({
+                page: 1,
+                count: 10,
+                sorting: {
+                    AddTime: 'desc'     // 初始化排序
+                }
+            }, {
+                getData: function ($defer, params) {
+                    $scope.isLoading = true;
+                    var requestParams = {
+                        pageNum: params.page(),
+                        pageSize: params.count(),
+                        keywords: $scope.Keywords
+                    };
+
+                    $http({
+                        method: "get",
+                        params: requestParams,
+                        url: "/sysroles/v1"
+                    }).then(function successCallback(response) {
+                        params.total(response.data.data.total);
+                        $defer.resolve(response.data.data.results);
+                        $scope.isLoading = false;
+                    }, function errorCallback(response) {
+                    });
+                }
+            });
+
+            //删除
+            $scope.removeMall = function (index, id) {
+                ngDialog.openConfirm({
+                    template: 'modalDialogId',
+                    className: 'ngdialog-theme-default'
+                }).then(function (value) {
+                        var url = '/sysroles/v1/' + id;
+                        $http({
+                            method: 'delete',
+                            url: url
+                        }).then(function successCallback(response) {
+                            if (response.data.code == 0) {
+                                $scope.tableParams.reload();
+                                Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            } else {
+                                Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                            }
+                        }, function errorCallback(response) {
+                        });
+                    }, function (reason) {
+                    }
+                );
+            }
+
+            //新增、更新展示
+            $scope.updateSysRole = function (item) {
+                $scope.ThisSysRole = angular.copy(item);
+
+                ngDialog.openConfirm({
+                    template: 'addSysRole',
+                    className: 'ngdialog-theme-plain',
+                    scope: $scope,
+                    preCloseCallback: function () {
+                        $scope.myCroppedImage = undefined;
+                        return true;
+                    }
+                }).then(function (value) {
+                }, function (reason) {
+                });
+            }
+
+            // 提交
+            $scope.saveThisMessage = function () {
+                if (!$scope.ThisSysRole.roleName || $scope.ThisSysRole.roleName == null) {
+                    Notify.alert("请输入职位名称", {status: 'warning', timeout: 1000});
+                    return false;
+                }
+
+                if ($scope.ThisSysRole.id > 0) {
+                    var url = "/sysroles/v1/" + $scope.ThisSysRole.id
+                    $http({
+                        method: "put",
+                        data: $scope.ThisSysRole,
+                        url: url
+                    }).then(function successCallback(response) {
+                        console.log(response);
+                        if (response.data.code == 0) {
+                            Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            $scope.tableParams.reload();
+                            ngDialog.closeAll();
+                        }
+                        else {
+                            Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                        }
+                    }, function errorCallback(response) {
+                    });
+                }
+                else {
+                    $http({
+                        method: "post",
+                        url: "/sysroles/v1",
+                        data: $scope.ThisSysRole
+                    }).then(function successCallback(response) {
+                        if (response.data.code == 0) {
+                            Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                            $scope.tableParams.reload();
+                            ngDialog.closeAll();
+                        }
+                        else {
+                            Notify.alert(response.data.msg, {status: 'warning', timeout: 1000});
+                        }
+                    }, function errorCallback(response) {
+                    });
+                }
+            };
+
+            //返回列表
+            $scope.closeDialog = function () {
+                ngDialog.closeAll();
+            }
+
+            //点击修改权限
+            $scope.updateAuth = function (sysRoleId) {
+                $scope.EditingSysRoleId = sysRoleId;
+                $http.post("/changeJurisdiction/getlist", {Id: sysRoleId}).then(function (returnData) {
+                    returnData.data.forEach(function (e) {
+                        e.id = e.Id.toString();
+                    });
+                    $scope.vm.treeData = returnData.data;
+                    ngDialog.openConfirm({
+                        template: 'getJurisdictionDialogId',
+                        className: 'ngdialog-theme-plain',
+                        scope: $scope
+                    }).then(function (value) {
+                    }, function (reason) {
+                    });
+                });
+            }
+
+            //确认点击(权限管理)
+            $scope.serveRootMessage = function () {
+                $http.post("/changeJurisdiction/updata", {
+                    AuthList: $("#authTree").jstree().get_checked(),
+                    Id: $scope.EditingSysRoleId
+                }).then(function (returnData) {
+                    if (returnData.data.IsSuccess) {
+                        Notify.alert('操作成功!', {status: 'success', timeout: 1000});
+                        ngDialog.closeAll();
+                    } else {
+                        Notify.alert(returnData.data.Message, {status: 'warning', timeout: 1000});
+                    }
+                });
+            }
+
+            //权限树初始化
+            $scope.vm = {
+                treeData: [],
+                treeConfig: {
+                    core: {
+                        multiple: true,
+                        animation: true,
+                        error: function (error) {
+                            $log.error('treeCtrl: error from js tree - ' + angular.toJson(error));
+                        },
+                        check_callback: true,
+                        worker: true
+                    },
+                    types: {
+                        default: {
+                            icon: 'fa fa-book'
+                        },
+                        star: {
+                            icon: 'glyphicon glyphicon-star'
+                        },
+                        cloud: {
+                            icon: 'glyphicon glyphicon-cloud'
+                        }
+                    },
+                    version: 1,
+                    plugins: ['types', 'checkbox']
+                },
+                applyModelChanges: function () {
+                    return !$scope.vm.ignoreChanges;
+                },
+                setNodeType: function () {
+                    var item = _.findWhere(this.treeData, {id: this.selectedNode});
+                    item.type = this.newType;
+                    toaster.pop('success', 'Node Type Changed', 'Changed the type of node ' + this.selectedNode);
+                },
+                readyCB: function () {
+                    $timeout(function () {
+                        $scope.vm.ignoreChanges = false;
+                        toaster.pop('success', 'JS Tree Ready', 'Js Tree issued the ready event');
+                    });
+                },
+                createCB: function (e, item) {
+                    $timeout(function () {
+                        toaster.pop('success', 'Node Added', 'Added new node with the text ' + item.node.text)
+                    });
+                }
+            };
+
+        }]);
+</script>

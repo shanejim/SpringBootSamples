@@ -574,6 +574,20 @@
                     resolve: helper.resolveFor('ngDialog', 'ngTable', 'lmlSample')
                 })
 
+            .state('app.sysRole',
+                {
+                    url: '/sysRole',
+                    title: '职位管理',
+                    templateUrl: '/page/sysRole/index',
+                    resolve: helper.resolveFor('ngDialog', 'ngTable', 'jsTree', 'toaster', 'ngJsTree')
+                })
+            .state('app.employee',
+                {
+                    url: '/employee',
+                    title: '员工管理',
+                    templateUrl: '/page/employee/index',
+                    resolve: helper.resolveFor('ngDialog', 'ngTable', 'lmlSample')
+                })
 
         //
         // CUSTOM RESOLVES

@@ -21,6 +21,9 @@
     select
     <include refid="Base_Column_List"/>
     from t_sys_role where is_deleted=0
+    <if test="keywords!=null">
+      and role_name like concat(concat('%',#{keywords}),'%')
+    </if>
   </select>
   <select id="selectByRoleName" resultMap="BaseResultMap">
     select

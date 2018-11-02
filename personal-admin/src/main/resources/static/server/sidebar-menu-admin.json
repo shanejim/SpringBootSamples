@@ -36,7 +36,7 @@
       },
       {
         "text": "员工管理",
-        "sref": "app.sysPermission",
+        "sref": "app.employee",
         "translate": "员工管理"
       }
     ],

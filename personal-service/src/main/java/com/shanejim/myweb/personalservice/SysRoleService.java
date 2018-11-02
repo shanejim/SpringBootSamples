@@ -13,5 +13,5 @@ public interface SysRoleService {
 
     SysRole getSysRoleById(Long id);
 
-    PagingReturn listSysRole(Integer pageNum, Integer pageSize);
+    PagingReturn listSysRole(Integer pageNum, Integer pageSize,String keywords);
 }
