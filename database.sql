@@ -6,9 +6,10 @@ CREATE TABLE `t_employee` (
   `name` varchar(45) DEFAULT '',
   `password` varchar(100) DEFAULT '',
   `salt` varchar(50) DEFAULT '',
+  `role_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='后台账号表';
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COMMENT='后台账号表';
 
 CREATE TABLE `t_sys_employee_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -21,7 +22,7 @@ CREATE TABLE `t_sys_employee_role` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='账号，角色（职位）关联表';
 
 CREATE TABLE `t_sys_permission` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL,
   `is_deleted` tinyint(3) unsigned DEFAULT '0',
   `add_time` datetime DEFAULT CURRENT_TIMESTAMP,
   `modified_time` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -32,7 +33,7 @@ CREATE TABLE `t_sys_permission` (
   `label` varchar(45) DEFAULT '' COMMENT '图标',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='权限表，菜单表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='权限表，菜单表';
 
 CREATE TABLE `t_sys_role` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
