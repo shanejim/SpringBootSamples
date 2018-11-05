@@ -1,24 +1,28 @@
 package com.shanejim.myweb.personalmodel.vo;
 
+import com.shanejim.myweb.personalmodel.entity.SysPermission;
+
+import java.util.List;
+
 /**
  * @description: TODO
  * @author: panshenjia
- * @create: 2018-11-02 15:56
+ * @create: 2018-11-05 16:48
  **/
-public class SysPermissionTreeVo {
+public class SysPermissionSiderVo {
     private Long id;
 
     private Long parentId;
 
     private String text;
 
-    private SysPermissionState state;
-
     private String parent;
 
     private String icon;
 
     private  String label;
+
+    private List<SysPermission> submenu;
 
     public Long getId() {
         return id;
@@ -44,14 +48,6 @@ public class SysPermissionTreeVo {
         this.text = text;
     }
 
-    public SysPermissionState getState() {
-        return state;
-    }
-
-    public void setState(SysPermissionState state) {
-        this.state = state;
-    }
-
     public String getParent() {
         return parent;
     }
@@ -75,6 +71,12 @@ public class SysPermissionTreeVo {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public List<SysPermission> getSubmenu() {
+        return submenu;
+    }
+
+    public void setSubmenu(List<SysPermission> submenu) {
+        this.submenu = submenu;
+    }
 }
-
-

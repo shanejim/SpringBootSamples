@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author: panshenjia
  * @create: 2018-10-26 11:17
  **/
-@Api(value = "employee", description = "employee相关的操作", tags = {"员工相关接口"})
+@Api(value = "employees", description = "employee相关的操作", tags = {"员工相关接口"})
 @RestController
 @RequestMapping(value = "/employees")
 public class EmployeeController {
@@ -56,7 +56,11 @@ public class EmployeeController {
         return ResultUtil.success(model);
     }
 
-
+    @ApiOperation(value = "获取菜单", notes = "获取菜单")
+    @GetMapping("/menus")
+    public Result menus() {
+        return ResultUtil.success(employeeService.listMyPermission());
+    }
 
 }
 

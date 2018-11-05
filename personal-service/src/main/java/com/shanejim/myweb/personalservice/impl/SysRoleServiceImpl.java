@@ -112,6 +112,8 @@ public class SysRoleServiceImpl implements SysRoleService {
             vo.setId(permission.getId());
             vo.setParentId(permission.getParentId());
             vo.setText(permission.getText());
+            vo.setIcon(permission.getIcon());
+            vo.setLabel(permission.getLabel());
             if (permission.getParentId() == 0) {
                 vo.setParent("#");
             } else {

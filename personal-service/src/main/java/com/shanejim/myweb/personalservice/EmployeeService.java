@@ -3,6 +3,9 @@ package com.shanejim.myweb.personalservice;
 import com.shanejim.myweb.personalmodel.entity.Employee;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
+import com.shanejim.myweb.personalmodel.vo.SysPermissionSiderVo;
+
+import java.util.List;
 
 /**
  * @description: TODO
@@ -21,4 +24,6 @@ public interface EmployeeService {
     Employee findEmployeeByUSerName(String username);
 
     PagingReturn<Employee> listEmployee(Integer pageNum, Integer pageSize);
+
+    List<SysPermissionSiderVo> listMyPermission();
 }

@@ -4897,19 +4897,25 @@ App.controller('SidebarController', ['$rootScope', '$scope', '$state', '$http', 
 
         $scope.loadSidebarMenu = function () {
 
-            var menuJson = 'server/sidebar-menu-admin.json',
-                menuURL = menuJson + '?v=' + (new Date().getTime()); // jumps cache
-            $http.get(menuURL)
+            // var menuJson = 'server/sidebar-menu-admin.json',
+            //     menuURL = menuJson + '?v=' + (new Date().getTime()); // jumps cache
+            // $http.get(menuURL)
+            //     .success(function (items) {
+            //         $scope.menuItems = items;
+            //     })
+            //     .error(function (data, status, headers, config) {
+            //         alert('Failure loading menu');
+            //     });
+
+            $http.get("/employees/menus")
                 .success(function (items) {
-                    $scope.menuItems = items;
-                })
-                .error(function (data, status, headers, config) {
-                    alert('Failure loading menu');
+                    if (items.code == 0) {
+                        $scope.menuItems = items.data;
+                    }
+                    else {
+                        alert('Failure loading menu');
+                    }
                 });
-            //   $http.post("/Employee/GetMenus")
-            //      .success(function (items) {
-            //          $scope.menuItems = items;
-            //      });
         };
 
         $scope.loadSidebarMenu();

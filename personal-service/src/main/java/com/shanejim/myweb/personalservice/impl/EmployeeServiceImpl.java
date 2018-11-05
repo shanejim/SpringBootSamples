@@ -3,19 +3,21 @@ package com.shanejim.myweb.personalservice.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.shanejim.myweb.personaldao.mapper.EmployeeMapper;
+import com.shanejim.myweb.personaldao.mapper.SysPermissionMapper;
 import com.shanejim.myweb.personalmodel.config.ApiException;
 import com.shanejim.myweb.personalmodel.entity.Employee;
-import com.shanejim.myweb.personalmodel.entity.PayMall;
+import com.shanejim.myweb.personalmodel.entity.SysPermission;
 import com.shanejim.myweb.personalmodel.enums.CodeEnums;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
 import com.shanejim.myweb.personalmodel.utils.DigestUtil;
+import com.shanejim.myweb.personalmodel.vo.SysPermissionSiderVo;
 import com.shanejim.myweb.personalservice.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +30,8 @@ import java.util.UUID;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
+    @Autowired
+    private SysPermissionMapper sysPermissionMapper;
 
     @Override
     public Employee findEmployeeByUSerName(String username) {
@@ -113,6 +117,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<SysPermissionSiderVo> listMyPermission() {
+        List<SysPermission> allSysPermission = sysPermissionMapper.selectAllSysPermission();
+
+        List<SysPermissionSiderVo> returnList = new ArrayList<>();
+        for (SysPermission permission : allSysPermission) {
+            SysPermissionSiderVo vo = new SysPermissionSiderVo();
+            if (permission.getParentId() == 0) {
+                vo.setId(permission.getId());
+                vo.setParentId(permission.getParentId());
+                vo.setText(permission.getText());
+                vo.setIcon(permission.getIcon());
+                vo.setLabel(permission.getLabel());
+                vo.setSubmenu(new ArrayList<>());
+                for (SysPermission child : allSysPermission) {
+                    if (child.getParentId() == vo.getId()) {
+                        vo.getSubmenu().add(child);
+                    }
+                }
+            }
+            returnList.add(vo);
+        }
+
+        return returnList;
     }
 }
 
