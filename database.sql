@@ -52,3 +52,9 @@ CREATE TABLE `t_sys_role_permission` (
   `permission_id` bigint(20) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='角色（职位），权限关联表';
+
+插入数据，初始账号
+INSERT INTO `personal`.`t_employee`
+(`name`,`password`,`salt`)
+VALUES
+('shanejim', '13320B2BDFAAEB001BF8152D2BC53B7FCE7AD12CA0917A03C7266C4A079B3FA3', '37ed2c4a-82e0-4b1b-b3ba-8dca379d5676');
