@@ -1,25 +1,28 @@
-package com.shanejim.myweb.personalmodel.entity;
+package com.shanejim.myweb.personalmodel.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public class Employee {
+/**
+ * @description: TODO
+ * @author: panshenjia
+ * @create: 2018-11-15 13:40
+ **/
+public class EmployeeVo {
     private Long id;
 
-    private Byte isDeleted;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime addTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime modifiedTime;
 
     private String name;
 
-    private String password;
-
-    private String salt;
-
     private Long roleId;
+
+    private String roleName;
 
     public Long getId() {
         return id;
@@ -27,14 +30,6 @@ public class Employee {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Byte getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(Byte isDeleted) {
-        this.isDeleted = isDeleted;
     }
 
     public LocalDateTime getAddTime() {
@@ -58,23 +53,7 @@ public class Employee {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
+        this.name = name;
     }
 
     public Long getRoleId() {
@@ -83,5 +62,13 @@ public class Employee {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

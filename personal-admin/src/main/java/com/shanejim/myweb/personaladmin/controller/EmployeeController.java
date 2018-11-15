@@ -6,6 +6,7 @@ import com.shanejim.myweb.personalmodel.query.ModifyPasswordQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
 import com.shanejim.myweb.personalmodel.response.Result;
 import com.shanejim.myweb.personalmodel.utils.ResultUtil;
+import com.shanejim.myweb.personalmodel.vo.EmployeeVo;
 import com.shanejim.myweb.personalservice.EmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,9 +51,11 @@ public class EmployeeController {
 
     @ApiOperation(value = "分页获取员工列表", notes = "分页获取所有员工")
     @GetMapping(value = "")
-    public Result<PagingReturn<Employee>> getPagingList(@RequestParam(name = "pageNum", required = false) Integer pageNum,
-                                                        @RequestParam(name = "pageSize", required = false) Integer pageSize) {
-        PagingReturn model = employeeService.listEmployee(pageNum, pageSize);
+    public Result<PagingReturn<EmployeeVo>> getPagingList(@RequestParam(name = "pageNum", required = false) Integer pageNum,
+                                                          @RequestParam(name = "pageSize", required = false) Integer pageSize,
+                                                          @RequestParam(name = "keywords", required = false) String keywords,
+                                                          @RequestParam(name = "sort", required = false) String sort) {
+        PagingReturn model = employeeService.listEmployee(pageNum, pageSize, keywords, sort);
         return ResultUtil.success(model);
     }
 

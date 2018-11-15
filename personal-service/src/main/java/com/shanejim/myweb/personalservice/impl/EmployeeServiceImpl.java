@@ -11,15 +11,14 @@ import com.shanejim.myweb.personalmodel.enums.CodeEnums;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateEmployeeQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
 import com.shanejim.myweb.personalmodel.utils.DigestUtil;
+import com.shanejim.myweb.personalmodel.vo.EmployeeVo;
 import com.shanejim.myweb.personalmodel.vo.SysPermissionSiderVo;
 import com.shanejim.myweb.personalservice.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @description: TODO
@@ -91,15 +90,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public PagingReturn<Employee> listEmployee(Integer pageNum, Integer pageSize) {
+    public PagingReturn<EmployeeVo> listEmployee(Integer pageNum, Integer pageSize, String keywords, String sort) {
         if (pageNum != null && pageSize != null) {
             PageHelper.startPage(pageNum, pageSize);
         }
 
-        List<Employee> employeeList = employeeMapper.selectAllEmployee();
-        PageInfo<Employee> pageInfo = new PageInfo<>(employeeList);
+        Map<String, Object> paramMap = new HashMap<>();
+        if (sort.contains("+")) {
+            paramMap.put("orderdir", "asc");
+            sort = sort.replace("+", "");
+        }
+        if (sort.contains("-")) {
+            paramMap.put("orderdir", "desc");
+            sort = sort.replace("-", "");
+        }
+        paramMap.put("orderfield", sort);
+        paramMap.put("keywords", keywords);
 
-        PagingReturn<Employee> model = new PagingReturn<>();
+        List<EmployeeVo> employeeList = employeeMapper.selectEmployeeList(paramMap);
+        PageInfo<EmployeeVo> pageInfo = new PageInfo<>(employeeList);
+
+        PagingReturn<EmployeeVo> model = new PagingReturn<>();
         model.setTotal(pageInfo.getTotal());
         model.setResults(employeeList);
         return model;
