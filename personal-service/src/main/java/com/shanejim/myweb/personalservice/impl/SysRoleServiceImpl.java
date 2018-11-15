@@ -8,6 +8,7 @@ import com.shanejim.myweb.personaldao.mapper.SysRolePermissionMapper;
 import com.shanejim.myweb.personalmodel.config.ApiException;
 import com.shanejim.myweb.personalmodel.entity.SysPermission;
 import com.shanejim.myweb.personalmodel.entity.SysRole;
+import com.shanejim.myweb.personalmodel.entity.SysRolePermission;
 import com.shanejim.myweb.personalmodel.enums.CodeEnums;
 import com.shanejim.myweb.personalmodel.query.AddOrUpdateSysRoleQuery;
 import com.shanejim.myweb.personalmodel.response.PagingReturn;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,6 +134,38 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public void updateSysRolePermisson(Long id, List<Long> authList) {
+        SysRole sysRole = sysRoleMapper.selectByPrimaryKey(id);
+        if (sysRole == null) {
+            throw new ApiException(CodeEnums.COMMON_ERR.getCode(), "职位不存在或已被删除！");
+        }
+        List<Long> thisSysRolePermission = sysRolePermissionMapper.selectPermissions(id);
 
+        List<Long> toDeleteIdList = new ArrayList<>(thisSysRolePermission);
+        List<Long> addedIdList = new ArrayList<>(authList);
+
+        toDeleteIdList.removeAll(authList);
+        addedIdList.removeAll(thisSysRolePermission);
+
+        List<SysRolePermission> toAddList = new ArrayList<>();
+        for (int i = 0; i < addedIdList.size(); i++) {
+
+            SysRolePermission sysRolePermission = new SysRolePermission();
+            sysRolePermission.setIsDeleted(new Byte("0"));
+            sysRolePermission.setAddTime(LocalDateTime.now());
+            sysRolePermission.setModifiedTime(LocalDateTime.now());
+            sysRolePermission.setRoleId(id);
+            sysRolePermission.setPermissionId(addedIdList.get(i));
+            toAddList.add(sysRolePermission);
+        }
+        deleteAndInsertData(id, toDeleteIdList, toAddList);
+    }
+
+    private void deleteAndInsertData(Long id, List<Long> toDeleteIdList, List<SysRolePermission> toAddRelationList) {
+        if (toDeleteIdList != null && toDeleteIdList.size() > 0) {
+            sysRolePermissionMapper.deleteBatch(toDeleteIdList, id);
+        }
+        if (toAddRelationList != null && toAddRelationList.size() > 0) {
+            sysRolePermissionMapper.insertBatch(toAddRelationList);
+        }
     }
 }

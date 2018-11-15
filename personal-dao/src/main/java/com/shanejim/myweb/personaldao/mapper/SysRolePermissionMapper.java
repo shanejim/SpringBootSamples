@@ -19,4 +19,9 @@ public interface SysRolePermissionMapper {
     int updateByPrimaryKey(SysRolePermission record);
 
     List<Long> selectPermissions(@Param("roleId") Long roleId);
+
+    int deleteBatch(@Param("sysPermissionIdList") List<Long> sysPermissionIdList, @Param("sysRoleId") Long sysRoleId);
+
+    int insertBatch(List<SysRolePermission> relationList);
+
 }

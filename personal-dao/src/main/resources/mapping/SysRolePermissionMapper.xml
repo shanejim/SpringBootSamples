@@ -27,6 +27,19 @@
     delete from t_sys_role_permission
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into t_sys_role_permission
+    (is_deleted, add_time, modified_time, role_id,permission_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.isDeleted}, #{item.addTime},
+      #{item.modifiedTime},
+      #{item.roleId},
+      #{item.permissionId}
+      )
+    </foreach>
+  </insert>
   <insert id="insert" parameterType="com.shanejim.myweb.personalmodel.entity.SysRolePermission" >
     insert into t_sys_role_permission (id, is_deleted, add_time, 
       modified_time, 
@@ -107,5 +120,15 @@
       role_id = #{roleId,jdbcType=BIGINT},
       permission_id = #{permissionId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!-- 批量逻辑删除 -->
+  <update id="deleteBatch">
+    <!-- forEach : 用来循环 collection : 用来指定循环的数据的类型 可以填的值有：array,list,map item
+        : 循环中为每个循环的数据指定一个别名 index : 循环中循环的下标 open : 开始 close : 结束 separator : 数组中元素之间的分隔符 -->
+    update t_sys_role_permission set is_deleted=1 where role_id=#{sysRoleId} and permission_id in
+    <foreach collection="sysPermissionIdList" item="item" index="index" open="("
+             separator="," close=")">
+      #{item}
+    </foreach>
   </update>
 </mapper>
