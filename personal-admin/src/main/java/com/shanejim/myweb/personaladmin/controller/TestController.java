@@ -71,6 +71,17 @@ public class TestController {
         return ResultUtil.success(auth);
     }
 
+    @PostMapping("/testjedis")
+    public Result testjedis() {
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+//                .getAuthentication()
+//                .getPrincipal();
+        //GrantedAuthority[] authorities = userDetails.getAuthorities();
+        jedisPool.getResource().set("mykey", "这是我的key");
+
+        return ResultUtil.success();
+    }
+
     @PreAuthorize("hasAuthority('admintest22')")
     @ApiOperation(value = "测试权限", notes = "测试权限")
     @PostMapping("/testPermission")
