@@ -60,7 +60,8 @@ INSERT INTO `personal`.`t_employee`
 VALUES
 ('shanejim', '13320B2BDFAAEB001BF8152D2BC53B7FCE7AD12CA0917A03C7266C4A079B3FA3', '37ed2c4a-82e0-4b1b-b3ba-8dca379d5676');
 
-SELECT * FROM personal.t_sys_permission;INSERT INTO `personal`.`t_sys_permission`
+SELECT * FROM personal.t_sys_permission;
+INSERT INTO `personal`.`t_sys_permission`
 (`id`,`is_deleted`,`add_time`,`modified_time`,`sref`,`parent_id`,`text`,`icon`,`label`,`sort`)
 VALUES
 ('1', '0', '2018-11-02 13:06:52', '2018-11-02 13:06:52', '#', '0', '人员管理', 'icon-users', '', '0'
