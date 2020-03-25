@@ -1,3 +1,5 @@
+CREATE SCHEMA `personal` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ;
+
 CREATE TABLE `t_employee` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `is_deleted` tinyint(3) unsigned DEFAULT '0',
