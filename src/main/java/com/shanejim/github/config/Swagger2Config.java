@@ -30,7 +30,7 @@ public class Swagger2Config {
     }
 
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("shanejim", "https://github.com/ShaneJim", "panshenjia@126.com");
+        Contact contact = new Contact("shanejim", "https://github.com/ShaneJim", "shanejim@163.com");
         return new ApiInfoBuilder()
                 .title("springboot利用swagger构建api文档")
                 .description("简单优雅的restfun风格，https://swagger.io/")

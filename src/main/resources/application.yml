@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     name: test
-    url: jdbc:mysql://192.168.25.130:3306/personal?characterEncoding=utf-8
+    url: jdbc:mysql://192.168.25.134:3306/personal?characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: shanejim
-    password: Shanejim123,,,
+    password: Shanejim123,,,s
 
 
 
